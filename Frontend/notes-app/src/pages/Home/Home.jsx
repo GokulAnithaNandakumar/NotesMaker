@@ -7,7 +7,16 @@ const Home = () => {
     <div>
       <Navbar /> 
       <div className='container mx-auto'>
-        <NoteCard />
+        <NoteCard 
+        title="Meeting on 7th April" 
+        date="3rd Apr 2024" 
+        content="Meeting on 7th April"
+        tags="#Meeting"
+        isPinned={true}
+        onEdit={() => {}}
+        onDelete={() => {}}
+        onPinNote={() => {}} 
+        />
     </div> 
     </div>
   )
