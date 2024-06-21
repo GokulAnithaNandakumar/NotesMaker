@@ -22,6 +22,14 @@ const AddEditNotes = () => {
         rows={10} 
         />
     </div>
+    <div className='mt-3'>
+        <label className='input-label'>Tags</label>
+
+    </div>
+
+    <button className='btn-primary font-medium mt-5 p-3' onClick={() => {}}>
+        Add
+    </button>
     </div>
   )
 }
