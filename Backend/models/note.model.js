@@ -12,4 +12,4 @@ const noteSchema = new Schema({
     createdOn: { type: Date, default: new Date().getTime() },
 })
 
-module.exports = mongoose.model('Note', noteSchema)
+module.exports = mongoose.model('Note', noteSchema);
