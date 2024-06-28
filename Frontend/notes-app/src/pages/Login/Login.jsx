@@ -26,13 +26,13 @@ const Login = () => {
     }
 
     setError('');
-
+    //login api call
     try {
       const response = await axiosInstance.post('/login', {
         email: email,
         password: password,
       });
-
+      //hangle login ersponse
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken);
         navigate('/dashboard');
