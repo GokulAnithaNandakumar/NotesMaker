@@ -3,7 +3,7 @@ import { MdClose } from 'react-icons/md';
 import axiosInstance from '../../utils/axiosInstance';
 import TagInput from '../../components/Input/TagInput';
 
-const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
+const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState([]);
@@ -29,6 +29,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             });
 
             if (response.data && response.data.success) {
+                showToastMessage('Note Added Successfully');
                 getAllNotes();
                 onClose();
             }
@@ -49,6 +50,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
             });
 
             if (response.data && response.data.success) {
+                showToastMessage('Note Edited Successfully');
                 getAllNotes();
                 onClose();
             }

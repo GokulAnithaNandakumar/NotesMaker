@@ -142,6 +142,7 @@ const Home = () => {
             setOpenAddEditModal({ isShown:false, type:'add', data:null });
         }}
         getAllNotes={getAllNotes}
+        showToastMessage={showToastMessage}
         />
         </Modal>
 
@@ -151,7 +152,7 @@ const Home = () => {
         message={showToastMsg.message}
         type={showToastMsg.type}
         onClose={handleCloseToast}
-        ></Toast>
+        />
 
     </div>
     </>
