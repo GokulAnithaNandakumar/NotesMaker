@@ -306,35 +306,36 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
 });
 
 //Search notes
-app.post("/search-notes", authenticateToken, async (req, res) => {
-    const { query } = req.body;
+app.get("/search-notes", authenticateToken, async (req, res) => {
+    const { query } = req.query;
     const { user } = req.user;
 
-    if(!query){
+    if (!query) {
         return res.status(400).json({ error: true, message: "Search Query is required" });
     }
-    try{
-        const matchingNotes=await Note.find({
+    try {
+        const matchingNotes = await Note.find({
             userId: user._id,
             $or: [
-                { title: { $regex: new RegexExp (query, "i") } },
-                { content: { $regex: new RegexExp (query, "i") } },
+                { title: { $regex: new RegExp(query, "i") } },
+                { content: { $regex: new RegExp(query, "i") } },
                 { tags: { $in: [query] } },
             ],
-        })
+        });
 
         return res.json({
             error: false,
             notes: matchingNotes,
             message: "Notes fetched successfully"
-        })
-    }catch{
+        });
+    } catch {
         return res.status(500).json({
             error: true,
             message: "Unable to search notes. Internal Server Error."
         });
     }
 });
+
 
 
 app.listen(8000, () => {

@@ -96,7 +96,7 @@ const Home = () => {
         try {
           const response = await axiosInstance.delete("/delete-note/" + noteId);
           if (response.data && response.data.message) {
-            handleShowToast("Note deleted successfully", "delete");
+            showToastMessage("Note deleted successfully", "delete");
             getAllNotes();
           }
         } catch(error) { 
@@ -106,29 +106,55 @@ const Home = () => {
         }
       }
 
+
+//Search fior note
       const onSearchNote = async (query) => {
         if (query === "") {
-          setIsSearch(false);
-          getAllNotes();
-          return;
+            setIsSearch(false);
+            getAllNotes();
+            return;
         }
         try {
-          const response = await axiosInstance.get("/search-notes", {
-            params: { query: query }
-          });
-          if (response.data && response.data.notes) {
-            setAllNotes(response.data.notes);
-            setIsSearch(true);
-          }
-        } catch(error) {
-          console.log("An unexpected error has occured");
+            const response = await axiosInstance.get("/search-notes", {
+                params: { query: query }
+            });
+            if (response.data && response.data.notes) {
+                setAllNotes(response.data.notes);
+                setIsSearch(true);
+            }
+        } catch (error) {
+            console.log(error);
         }
-      }
-    
-      const handleClearSearch = () => {
+    }
+
+    const handleClearSearch = () => {
         setIsSearch(false);
         getAllNotes();
+    }
+
+    //Handle Pin Note
+  const updateIsPinned = async (noteData) => {
+    const noteId = noteData._id;
+
+    try {
+      const response = await axiosInstance.put("/update-note-pinned/" + noteId, {
+          isPinned: !noteData.isPinned
+      });
+
+      if (response.data && response.data.note) {
+          showToastMessage("Note pinned successfully");
+          getAllNotes();
       }
+  } catch(error) {
+      if (error.response && error.response.data && error.response.data.message)
+          console.log(error.response.data.message);
+      else
+          console.log(error)
+          // console.log("An unexpected error has occured");
+  }
+}
+
+
     
 
   return (
@@ -147,7 +173,7 @@ const Home = () => {
             isPinned={item.isPinned}
             onEdit={() =>  handleEdit(item)}
             onDelete={() => deleteNote(item)}
-            onPinNote={() => {}} 
+            onPinNote={() => updateIsPinned(item)} 
             />
         ))}
         
