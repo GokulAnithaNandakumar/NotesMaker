@@ -31,6 +31,7 @@ const Home = () => {
     
 
     const [userInfo, setUserInfo] = useState(null);
+    const [isSearch, setIsSearch] = useState(false);
     const navigate=useNavigate();
 
     const handleEdit=(noteDetails) => {
@@ -105,10 +106,35 @@ const Home = () => {
         }
       }
 
+      const onSearchNote = async (query) => {
+        if (query === "") {
+          setIsSearch(false);
+          getAllNotes();
+          return;
+        }
+        try {
+          const response = await axiosInstance.get("/search-notes", {
+            params: { query: query }
+          });
+          if (response.data && response.data.notes) {
+            setAllNotes(response.data.notes);
+            setIsSearch(true);
+          }
+        } catch(error) {
+          console.log("An unexpected error has occured");
+        }
+      }
+    
+      const handleClearSearch = () => {
+        setIsSearch(false);
+        getAllNotes();
+      }
+    
+
   return (
     <>
     <div>
-      <Navbar userInfo={userInfo} /> 
+      <Navbar userInfo={userInfo} onSearchNote={onSearchNote} handleClearSearch={handleClearSearch} /> 
       <div className='container mx-auto'>
         {allNotes.length > 0 ? (<div className='grid grid-cols-3 gap-4 mt-8'>
         {allNotes.map((item, index) => (

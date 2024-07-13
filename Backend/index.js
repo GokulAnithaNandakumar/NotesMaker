@@ -265,6 +265,7 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
     }
 })
 
+//update is pinned
 app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
     const noteId = req.params.noteId;
     const { isPinned } = req.body;
@@ -300,6 +301,37 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
         return res.status(500).json({
             error: true,
             message: "Unable to update note. Internal Server Error."
+        });
+    }
+});
+
+//Search notes
+app.post("/search-notes", authenticateToken, async (req, res) => {
+    const { query } = req.body;
+    const { user } = req.user;
+
+    if(!query){
+        return res.status(400).json({ error: true, message: "Search Query is required" });
+    }
+    try{
+        const matchingNotes=await Note.find({
+            userId: user._id,
+            $or: [
+                { title: { $regex: new RegexExp (query, "i") } },
+                { content: { $regex: new RegexExp (query, "i") } },
+                { tags: { $in: [query] } },
+            ],
+        })
+
+        return res.json({
+            error: false,
+            notes: matchingNotes,
+            message: "Notes fetched successfully"
+        })
+    }catch{
+        return res.status(500).json({
+            error: true,
+            message: "Unable to search notes. Internal Server Error."
         });
     }
 });
